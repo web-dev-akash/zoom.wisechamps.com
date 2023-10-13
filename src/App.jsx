@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { DotPulse } from "@uiball/loaders";
+import { useState, useEffect } from "react";
+import { RaceBy } from "@uiball/loaders";
 import axios from "axios";
 import "./App.css";
 
 export const App = () => {
-  const [email, setEmail] = useState("");
+  const query = new URLSearchParams(window.location.search);
+  const [email, setEmail] = useState(query.get("email"));
   const [mode, setMode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -51,15 +52,44 @@ export const App = () => {
     }
   };
 
+  useEffect(() => {
+    if (email) {
+      handleClick(email);
+    }
+  }, []);
+
   if (loading) {
     return (
       <div
-        id="loadingDiv"
         style={{
-          width: "fit-content",
+          overflow: "hidden",
         }}
       >
-        <DotPulse size={60} speed={1.3} color="black" />
+        <p style={{ fontSize: "18px" }}>Searching for your session..</p>
+        <RaceBy
+          size={300}
+          lineWeight={20}
+          speed={1.4}
+          color="rgba(129, 140, 248)"
+        />
+      </div>
+    );
+  }
+
+  if (mode === "zoomlink") {
+    return (
+      <div
+        style={{
+          overflow: "hidden",
+        }}
+      >
+        <p style={{ fontSize: "18px" }}>Redirecting you to Zoom..</p>
+        <RaceBy
+          size={300}
+          lineWeight={20}
+          speed={1.4}
+          color="rgba(129, 140, 248)"
+        />
       </div>
     );
   }
@@ -68,19 +98,6 @@ export const App = () => {
     return (
       <div>
         <h1>Something Went Wrong. Please Refresh</h1>
-      </div>
-    );
-  }
-
-  if (mode === "zoomlink") {
-    return (
-      <div
-        id="loadingDiv"
-        style={{
-          width: "fit-content",
-        }}
-      >
-        <DotPulse size={60} speed={1.3} color="black" />
       </div>
     );
   }
