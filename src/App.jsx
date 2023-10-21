@@ -71,10 +71,14 @@ export const App = () => {
 
   useEffect(() => {
     if (email && payId && linkId && credits && amount) {
-      (async () => {
-        await capturePayment({ email, payId, linkId, credits, amount });
-        await handleClick(email);
-      })();
+      capturePayment({
+        email,
+        payId,
+        linkId,
+        credits,
+        amount,
+      });
+      handleClick(email);
     }
   }, []);
 
