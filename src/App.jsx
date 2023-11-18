@@ -11,6 +11,8 @@ export const App = () => {
   const [credits, setCredits] = useState(query.get("credits"));
   const [amount, setAmount] = useState(query.get("amount"));
   const [mode, setMode] = useState("");
+  const [username, setUsername] = useState("");
+  const [currCredits, setCurrcredits] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const emailRegex = new RegExp(
@@ -49,6 +51,7 @@ export const App = () => {
       return;
     }
     try {
+      setMode("");
       setLoading(true);
       const url = `https://backend.wisechamps.app/meeting`;
       const res = await axios.post(url, { email: emailParam, payId });
@@ -61,6 +64,31 @@ export const App = () => {
       } else {
         setMode(mode);
       }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setError(true);
+      console.log("error is ------------", error);
+    }
+  };
+
+  const handleCredits = async (emailParam) => {
+    if (!emailRegex.test(emailParam)) {
+      alert("Please Enter a Valid Email");
+      window.location.reload();
+      return;
+    }
+    try {
+      setMode("showCredits");
+      setLoading(true);
+      const url = `https://backend.wisechamps.app/meeting`;
+      const res = await axios.post(url, { email: emailParam, payId });
+      const mode = res.data.mode;
+      console.log(res.data);
+      const credits = res.data.credits;
+      const name = res.data.name;
+      setCurrcredits(credits);
+      setUsername(name);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -90,7 +118,11 @@ export const App = () => {
         }}
       >
         <p style={{ fontSize: "18px" }}>
-          {payId ? "Processing Your Payment.." : "Searching for your session.."}
+          {payId
+            ? "Processing Your Payment.."
+            : mode === "showCredits"
+            ? "Getting your credit balance"
+            : "Searching for your session.."}
         </p>
         <RaceBy
           size={300}
@@ -170,6 +202,24 @@ export const App = () => {
     );
   }
 
+  if (mode === "showCredits") {
+    return (
+      <div
+        id="loadingDiv"
+        style={{
+          width: "fit-content",
+        }}
+      >
+        <p>
+          Hi {username}, Your have currently <b>{currCredits} credits</b>.
+        </p>
+        <button id="submit-btn" onClick={() => handleClick(email)}>
+          Join Meeting Now
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="main">
       <h3>Email</h3>
@@ -182,9 +232,20 @@ export const App = () => {
           onChange={handleChange}
         />
         <p>* Please use the registered Email.</p>
-        <button id="submit-btn" onClick={() => handleClick(email)}>
-          Join Zoom Meeting
-        </button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "20px",
+          }}
+        >
+          <button id="submit-btn" onClick={() => handleClick(email)}>
+            Join Zoom Meeting
+          </button>
+          <button id="submit-btn" onClick={() => handleCredits(email)}>
+            Get Your Credit Balance
+          </button>
+        </div>
       </div>
     </div>
   );
