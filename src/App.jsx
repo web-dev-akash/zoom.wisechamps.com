@@ -55,7 +55,6 @@ export const App = () => {
       setLoading(true);
       const url = `https://backend.wisechamps.app/meeting`;
       const res = await axios.post(url, { email: emailParam, payId });
-      const status = res.data.status;
       const mode = res.data.mode;
       const link = res.data.link;
       if (mode === "zoomlink") {
@@ -83,8 +82,6 @@ export const App = () => {
       setLoading(true);
       const url = `https://backend.wisechamps.app/meeting`;
       const res = await axios.post(url, { email: emailParam, payId });
-      const mode = res.data.mode;
-      console.log(res.data);
       const credits = res.data.credits;
       const name = res.data.name;
       setCurrcredits(credits);
@@ -213,9 +210,29 @@ export const App = () => {
         <p>
           Hi {username}, Your have currently <b>{currCredits} credits</b>.
         </p>
-        <button id="submit-btn" onClick={() => handleClick(email)}>
-          Join Meeting Now
-        </button>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "15px",
+          }}
+        >
+          {credits < 10 ? (
+            <button
+              id="submit-btn"
+              onClick={() =>
+                window.location.assign(
+                  `https://payment.wisechamps.com?email=${email}`
+                )
+              }
+            >
+              Buy Credits Now
+            </button>
+          ) : null}
+          <button id="submit-btn" onClick={() => handleClick(email)}>
+            Join Meeting Now
+          </button>
+        </div>
       </div>
     );
   }
