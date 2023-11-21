@@ -217,7 +217,7 @@ export const App = () => {
             gap: "15px",
           }}
         >
-          {credits < 10 ? (
+          {currCredits < 10 ? (
             <button
               id="submit-btn"
               onClick={() =>
