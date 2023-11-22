@@ -27,7 +27,7 @@ export const App = () => {
   const capturePayment = async ({ email, payId, linkId, credits, amount }) => {
     try {
       setLoading(true);
-      const url = `https://backend.wisechamps.app/payment/capture`;
+      const url = `https://backend.wisechamps.com/payment/capture`;
       const res = await axios.post(url, {
         linkId,
         payId,
@@ -53,7 +53,7 @@ export const App = () => {
     try {
       setMode("");
       setLoading(true);
-      const url = `https://backend.wisechamps.app/meeting`;
+      const url = `https://backend.wisechamps.com/meeting`;
       const res = await axios.post(url, { email: emailParam, payId });
       const mode = res.data.mode;
       const link = res.data.link;
@@ -80,7 +80,7 @@ export const App = () => {
     try {
       setMode("showCredits");
       setLoading(true);
-      const url = `https://backend.wisechamps.app/meeting`;
+      const url = `https://backend.wisechamps.com/meeting`;
       const res = await axios.post(url, { email: emailParam, payId });
       const credits = res.data.credits;
       const name = res.data.name;
