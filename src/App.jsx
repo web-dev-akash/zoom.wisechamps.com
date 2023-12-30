@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { RaceBy } from "@uiball/loaders";
+import moment from "moment";
 import axios from "axios";
 import "./App.css";
 
@@ -15,6 +16,9 @@ export const App = () => {
   const [currCredits, setCurrcredits] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [grade, setGrade] = useState("");
+  const [link, setLink] = useState("");
+
   const emailRegex = new RegExp(
     /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/,
     "gm"
@@ -22,6 +26,47 @@ export const App = () => {
   const handleChange = (e) => {
     e.preventDefault();
     setEmail(e.target.value);
+  };
+
+  const handleChangeGrade = (e) => {
+    const grade = e.target.value;
+    setGrade(grade);
+  };
+
+  const handleGradeSubmit = async (email, grade, link) => {
+    try {
+      setLoading(true);
+      const url = `https://backend.wisechamps.com/quiz/team`;
+      const res = await axios.post(url, { email: email, grade: grade });
+      const phone = res.data.phone;
+      const student_name = res.data.student_name;
+      const start_date = moment().format("YYYY-MM-DD");
+      const expiry_date = moment().add(1, "year").format("YYYY-MM-DD");
+      const api = process.env.REACT_APP_API;
+      const authToken = process.env.REACT_APP_TOKEN;
+      const config = {
+        headers: {
+          Authorization: "Bearer " + authToken,
+          "Content-Type": "application/json",
+        },
+      };
+      const body = {
+        phone: phone,
+        email: email,
+        student_name: student_name,
+        student_grade: grade,
+        expiry_date: expiry_date,
+        start_date: start_date,
+      };
+      await axios.post(api, body, config);
+      setMode("loading");
+      window.location.assign(link);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setError(true);
+      console.log("error is ------------", error);
+    }
   };
 
   const capturePayment = async ({ email, payId, linkId, credits, amount }) => {
@@ -57,8 +102,13 @@ export const App = () => {
       const res = await axios.post(url, { email: emailParam, payId });
       const mode = res.data.mode;
       const link = res.data.link;
+      const credits = res.data.credits;
+      const grade = res.data.grade;
+      setLink(link);
+      setGrade(grade);
+      setCredits(credits);
       if (mode === "zoomlink") {
-        setMode("zoomlink");
+        setMode(mode);
         window.location.assign(link);
       } else {
         setMode(mode);
@@ -107,7 +157,7 @@ export const App = () => {
     }
   }, []);
 
-  if (loading) {
+  if (loading || mode === "loading") {
     return (
       <div
         style={{
@@ -127,6 +177,192 @@ export const App = () => {
           speed={1.4}
           color="rgba(129, 140, 248)"
         />
+      </div>
+    );
+  }
+
+  if (mode === "oldData") {
+    return (
+      <div className="main mainReferee">
+        <h3>Select Your Grade</h3>
+        <label className="label">
+          <input
+            value="1"
+            name="value-radio"
+            id="value-2"
+            className="radio-input"
+            type="radio"
+            onChange={handleChangeGrade}
+          />
+          <div className="radio-design"></div>
+          <div
+            className="label-text"
+            style={{
+              textTransform: "uppercase",
+              fontWeight: "600",
+              letterSpacing: "1px",
+            }}
+          >
+            Grade 1
+          </div>
+        </label>
+        <label className="label">
+          <input
+            value="2"
+            name="value-radio"
+            id="value-3"
+            className="radio-input"
+            type="radio"
+            onChange={handleChangeGrade}
+          />
+          <div className="radio-design"></div>
+          <div
+            className="label-text"
+            style={{
+              textTransform: "uppercase",
+              fontWeight: "600",
+              letterSpacing: "1px",
+            }}
+          >
+            Grade 2
+          </div>
+        </label>
+        <label className="label">
+          <input
+            value="3"
+            name="value-radio"
+            id="value-4"
+            className="radio-input"
+            type="radio"
+            onChange={handleChangeGrade}
+          />
+          <div className="radio-design"></div>
+          <div
+            className="label-text"
+            style={{
+              textTransform: "uppercase",
+              fontWeight: "600",
+              letterSpacing: "1px",
+            }}
+          >
+            Grade 3
+          </div>
+        </label>
+        <label className="label">
+          <input
+            value="4"
+            name="value-radio"
+            id="value-4"
+            className="radio-input"
+            type="radio"
+            onChange={handleChangeGrade}
+          />
+          <div className="radio-design"></div>
+          <div
+            className="label-text"
+            style={{
+              textTransform: "uppercase",
+              fontWeight: "600",
+              letterSpacing: "1px",
+            }}
+          >
+            Grade 4
+          </div>
+        </label>
+        <label className="label">
+          <input
+            value="5"
+            name="value-radio"
+            id="value-2"
+            className="radio-input"
+            type="radio"
+            onChange={handleChangeGrade}
+          />
+          <div className="radio-design"></div>
+          <div
+            className="label-text"
+            style={{
+              textTransform: "uppercase",
+              fontWeight: "600",
+              letterSpacing: "1px",
+            }}
+          >
+            Grade 5
+          </div>
+        </label>
+        <label className="label">
+          <input
+            value="6"
+            name="value-radio"
+            id="value-3"
+            className="radio-input"
+            type="radio"
+            onChange={handleChangeGrade}
+          />
+          <div className="radio-design"></div>
+          <div
+            className="label-text"
+            style={{
+              textTransform: "uppercase",
+              fontWeight: "600",
+              letterSpacing: "1px",
+            }}
+          >
+            Grade 6
+          </div>
+        </label>
+        <label className="label">
+          <input
+            value="7"
+            name="value-radio"
+            id="value-4"
+            className="radio-input"
+            type="radio"
+            onChange={handleChangeGrade}
+          />
+          <div className="radio-design"></div>
+          <div
+            className="label-text"
+            style={{
+              textTransform: "uppercase",
+              fontWeight: "600",
+              letterSpacing: "1px",
+            }}
+          >
+            Grade 7
+          </div>
+        </label>
+        <label className="label">
+          <input
+            value="8"
+            name="value-radio"
+            id="value-4"
+            className="radio-input"
+            type="radio"
+            onChange={handleChangeGrade}
+          />
+          <div className="radio-design"></div>
+          <div
+            className="label-text"
+            style={{
+              textTransform: "uppercase",
+              fontWeight: "600",
+              letterSpacing: "1px",
+            }}
+          >
+            Grade 8
+          </div>
+        </label>
+        <button
+          id="submit-btn"
+          onClick={() => handleGradeSubmit(email, grade, link)}
+          style={{
+            marginTop: "10px",
+            width: "100%",
+          }}
+        >
+          Submit
+        </button>
       </div>
     );
   }
