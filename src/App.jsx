@@ -3,6 +3,8 @@ import { RaceBy } from "@uiball/loaders";
 import moment from "moment";
 import axios from "axios";
 import "./App.css";
+import "animate.css";
+import { Header } from "./components/Header";
 
 export const App = () => {
   const query = new URLSearchParams(window.location.search);
@@ -33,13 +35,15 @@ export const App = () => {
     setGrade(grade);
   };
 
-  const handleGradeSubmit = async (email, grade, link) => {
+  const handleGradeSubmit = async (email, grade) => {
     try {
       setLoading(true);
+      setMode("zoomlink");
       const url = `https://backend.wisechamps.com/quiz/team`;
       const res = await axios.post(url, { email: email, grade: grade });
       const phone = res.data.phone;
       const student_name = res.data.student_name;
+      const newLink = res.data.newLink;
       const start_date = moment().format("YYYY-MM-DD");
       const expiry_date = moment().add(1, "year").format("YYYY-MM-DD");
       const api = process.env.REACT_APP_API;
@@ -59,9 +63,7 @@ export const App = () => {
         start_date: start_date,
       };
       await axios.post(api, body, config);
-      setMode("loading");
-      window.location.assign(link);
-      setLoading(false);
+      window.location.assign(newLink);
     } catch (error) {
       setLoading(false);
       setError(true);
@@ -92,7 +94,6 @@ export const App = () => {
   const handleClick = async (emailParam) => {
     if (!emailRegex.test(emailParam)) {
       alert("Please Enter a Valid Email");
-      window.location.reload();
       return;
     }
     try {
@@ -183,187 +184,201 @@ export const App = () => {
 
   if (mode === "oldData") {
     return (
-      <div className="main mainReferee">
-        <h3>Select Your Grade</h3>
-        <label className="label">
-          <input
-            value="1"
-            name="value-radio"
-            id="value-2"
-            className="radio-input"
-            type="radio"
-            onChange={handleChangeGrade}
-          />
-          <div className="radio-design"></div>
-          <div
-            className="label-text"
-            style={{
-              textTransform: "uppercase",
-              fontWeight: "600",
-              letterSpacing: "1px",
-            }}
-          >
-            Grade 1
-          </div>
-        </label>
-        <label className="label">
-          <input
-            value="2"
-            name="value-radio"
-            id="value-3"
-            className="radio-input"
-            type="radio"
-            onChange={handleChangeGrade}
-          />
-          <div className="radio-design"></div>
-          <div
-            className="label-text"
-            style={{
-              textTransform: "uppercase",
-              fontWeight: "600",
-              letterSpacing: "1px",
-            }}
-          >
-            Grade 2
-          </div>
-        </label>
-        <label className="label">
-          <input
-            value="3"
-            name="value-radio"
-            id="value-4"
-            className="radio-input"
-            type="radio"
-            onChange={handleChangeGrade}
-          />
-          <div className="radio-design"></div>
-          <div
-            className="label-text"
-            style={{
-              textTransform: "uppercase",
-              fontWeight: "600",
-              letterSpacing: "1px",
-            }}
-          >
-            Grade 3
-          </div>
-        </label>
-        <label className="label">
-          <input
-            value="4"
-            name="value-radio"
-            id="value-4"
-            className="radio-input"
-            type="radio"
-            onChange={handleChangeGrade}
-          />
-          <div className="radio-design"></div>
-          <div
-            className="label-text"
-            style={{
-              textTransform: "uppercase",
-              fontWeight: "600",
-              letterSpacing: "1px",
-            }}
-          >
-            Grade 4
-          </div>
-        </label>
-        <label className="label">
-          <input
-            value="5"
-            name="value-radio"
-            id="value-2"
-            className="radio-input"
-            type="radio"
-            onChange={handleChangeGrade}
-          />
-          <div className="radio-design"></div>
-          <div
-            className="label-text"
-            style={{
-              textTransform: "uppercase",
-              fontWeight: "600",
-              letterSpacing: "1px",
-            }}
-          >
-            Grade 5
-          </div>
-        </label>
-        <label className="label">
-          <input
-            value="6"
-            name="value-radio"
-            id="value-3"
-            className="radio-input"
-            type="radio"
-            onChange={handleChangeGrade}
-          />
-          <div className="radio-design"></div>
-          <div
-            className="label-text"
-            style={{
-              textTransform: "uppercase",
-              fontWeight: "600",
-              letterSpacing: "1px",
-            }}
-          >
-            Grade 6
-          </div>
-        </label>
-        <label className="label">
-          <input
-            value="7"
-            name="value-radio"
-            id="value-4"
-            className="radio-input"
-            type="radio"
-            onChange={handleChangeGrade}
-          />
-          <div className="radio-design"></div>
-          <div
-            className="label-text"
-            style={{
-              textTransform: "uppercase",
-              fontWeight: "600",
-              letterSpacing: "1px",
-            }}
-          >
-            Grade 7
-          </div>
-        </label>
-        <label className="label">
-          <input
-            value="8"
-            name="value-radio"
-            id="value-4"
-            className="radio-input"
-            type="radio"
-            onChange={handleChangeGrade}
-          />
-          <div className="radio-design"></div>
-          <div
-            className="label-text"
-            style={{
-              textTransform: "uppercase",
-              fontWeight: "600",
-              letterSpacing: "1px",
-            }}
-          >
-            Grade 8
-          </div>
-        </label>
-        <button
-          id="submit-btn"
-          onClick={() => handleGradeSubmit(email, grade, link)}
+      <>
+        <Header />
+        <div
+          className="main mainReferee animate__animated animate__fadeInRight"
           style={{
-            marginTop: "10px",
-            width: "100%",
+            marginTop: "40px",
           }}
         >
-          Submit
-        </button>
-      </div>
+          <h3
+            style={{
+              margin: "0 0 10px 0",
+            }}
+          >
+            Select Your Grade
+          </h3>
+          <label className="label">
+            <input
+              value="1"
+              name="value-radio"
+              id="value-2"
+              className="radio-input"
+              type="radio"
+              onChange={handleChangeGrade}
+            />
+            <div className="radio-design"></div>
+            <div
+              className="label-text"
+              style={{
+                textTransform: "uppercase",
+                fontWeight: "600",
+                letterSpacing: "1px",
+              }}
+            >
+              Grade 1
+            </div>
+          </label>
+          <label className="label">
+            <input
+              value="2"
+              name="value-radio"
+              id="value-3"
+              className="radio-input"
+              type="radio"
+              onChange={handleChangeGrade}
+            />
+            <div className="radio-design"></div>
+            <div
+              className="label-text"
+              style={{
+                textTransform: "uppercase",
+                fontWeight: "600",
+                letterSpacing: "1px",
+              }}
+            >
+              Grade 2
+            </div>
+          </label>
+          <label className="label">
+            <input
+              value="3"
+              name="value-radio"
+              id="value-4"
+              className="radio-input"
+              type="radio"
+              onChange={handleChangeGrade}
+            />
+            <div className="radio-design"></div>
+            <div
+              className="label-text"
+              style={{
+                textTransform: "uppercase",
+                fontWeight: "600",
+                letterSpacing: "1px",
+              }}
+            >
+              Grade 3
+            </div>
+          </label>
+          <label className="label">
+            <input
+              value="4"
+              name="value-radio"
+              id="value-4"
+              className="radio-input"
+              type="radio"
+              onChange={handleChangeGrade}
+            />
+            <div className="radio-design"></div>
+            <div
+              className="label-text"
+              style={{
+                textTransform: "uppercase",
+                fontWeight: "600",
+                letterSpacing: "1px",
+              }}
+            >
+              Grade 4
+            </div>
+          </label>
+          <label className="label">
+            <input
+              value="5"
+              name="value-radio"
+              id="value-2"
+              className="radio-input"
+              type="radio"
+              onChange={handleChangeGrade}
+            />
+            <div className="radio-design"></div>
+            <div
+              className="label-text"
+              style={{
+                textTransform: "uppercase",
+                fontWeight: "600",
+                letterSpacing: "1px",
+              }}
+            >
+              Grade 5
+            </div>
+          </label>
+          <label className="label">
+            <input
+              value="6"
+              name="value-radio"
+              id="value-3"
+              className="radio-input"
+              type="radio"
+              onChange={handleChangeGrade}
+            />
+            <div className="radio-design"></div>
+            <div
+              className="label-text"
+              style={{
+                textTransform: "uppercase",
+                fontWeight: "600",
+                letterSpacing: "1px",
+              }}
+            >
+              Grade 6
+            </div>
+          </label>
+          <label className="label">
+            <input
+              value="7"
+              name="value-radio"
+              id="value-4"
+              className="radio-input"
+              type="radio"
+              onChange={handleChangeGrade}
+            />
+            <div className="radio-design"></div>
+            <div
+              className="label-text"
+              style={{
+                textTransform: "uppercase",
+                fontWeight: "600",
+                letterSpacing: "1px",
+              }}
+            >
+              Grade 7
+            </div>
+          </label>
+          <label className="label">
+            <input
+              value="8"
+              name="value-radio"
+              id="value-4"
+              className="radio-input"
+              type="radio"
+              onChange={handleChangeGrade}
+            />
+            <div className="radio-design"></div>
+            <div
+              className="label-text"
+              style={{
+                textTransform: "uppercase",
+                fontWeight: "600",
+                letterSpacing: "1px",
+              }}
+            >
+              Grade 8
+            </div>
+          </label>
+          <button
+            id="submit-btn"
+            onClick={() => handleGradeSubmit(email, grade)}
+            style={{
+              marginTop: "10px",
+              width: "100%",
+            }}
+          >
+            Submit
+          </button>
+        </div>
+      </>
     );
   }
 
@@ -387,119 +402,135 @@ export const App = () => {
 
   if (error || mode.includes("internalservererror")) {
     return (
-      <div>
-        <h1>Something Went Wrong. Please Refresh</h1>
-      </div>
+      <>
+        <Header />
+        <div className="animate__animated animate__fadeInRight">
+          <h1>Something Went Wrong. Please Refresh</h1>
+        </div>
+      </>
     );
   }
 
   if (mode === "nosession") {
     return (
-      <div>
-        <p>
-          It appears that there is no active
-          <br />
-          session at this moment.
-        </p>
-      </div>
+      <>
+        <Header />
+        <div className="animate__animated animate__fadeInRight">
+          <p>
+            It appears that there is no active
+            <br />
+            session at this moment.
+          </p>
+        </div>
+      </>
     );
   }
 
   if (mode === "nouser") {
     return (
-      <div className="email-not-found">
-        <p>
-          This Email is not registered with us. <br />
-          Please use a registered Email Address
-        </p>
-        <div>
-          <button id="submit-btn" onClick={() => setMode("")}>
-            Try Again
-          </button>
-          <button
-            id="submit-btn"
-            onClick={() => {
-              window.open(
-                `https://wa.me/919717094422?text=${encodeURIComponent(
-                  "Please send me my registered email"
-                )}`,
-                "_blank"
-              );
-              setMode("");
-            }}
-          >
-            Get Your Registered Email
-          </button>
+      <>
+        <Header />
+        <div className="email-not-found animate__animated animate__fadeInRight">
+          <p>
+            This Email is not registered with us. <br />
+            Please use a registered Email Address
+          </p>
+          <div>
+            <button id="submit-btn" onClick={() => setMode("")}>
+              Try Again
+            </button>
+            <button
+              id="submit-btn"
+              onClick={() => {
+                window.open(
+                  `https://wa.me/919717094422?text=${encodeURIComponent(
+                    "Please send me my registered email"
+                  )}`,
+                  "_blank"
+                );
+                setMode("");
+              }}
+            >
+              Get Your Registered Email
+            </button>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (mode === "showCredits") {
     return (
-      <div
-        id="loadingDiv"
-        style={{
-          width: "fit-content",
-        }}
-      >
-        <p>
-          Hi {username}, Your have currently <b>{currCredits} credits</b>.
-        </p>
+      <>
+        <Header />
         <div
+          id="loadingDiv"
           style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "15px",
+            width: "fit-content",
           }}
+          className="animate__animated animate__fadeInRight"
         >
-          {currCredits < 10 ? (
-            <button
-              id="submit-btn"
-              onClick={() =>
-                window.location.assign(
-                  `https://payment.wisechamps.com?email=${email}`
-                )
-              }
-            >
-              Buy Credits Now
+          <p>
+            Hi {username}, Your have currently <b>{currCredits} credits</b>.
+          </p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "15px",
+            }}
+          >
+            {currCredits < 10 ? (
+              <button
+                id="submit-btn"
+                onClick={() =>
+                  window.location.assign(
+                    `https://payment.wisechamps.com?email=${email}`
+                  )
+                }
+              >
+                Buy Credits Now
+              </button>
+            ) : null}
+            <button id="submit-btn" onClick={() => handleClick(email)}>
+              Join Meeting Now
             </button>
-          ) : null}
-          <button id="submit-btn" onClick={() => handleClick(email)}>
-            Join Meeting Now
-          </button>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   return (
-    <div className="main">
-      <h3>Email</h3>
-      <div className="form">
-        <input
-          className="input"
-          type="email"
-          placeholder="Enter Email"
-          inputMode="email"
-          onChange={handleChange}
-        />
-        <p>* Please use the registered Email.</p>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-          }}
-        >
-          <button id="submit-btn" onClick={() => handleClick(email)}>
-            Join Zoom Meeting
-          </button>
-          <button id="submit-btn" onClick={() => handleCredits(email)}>
-            Get Your Credit Balance
-          </button>
+    <>
+      <Header />
+      <div className="main animate__animated animate__fadeInRight">
+        <h3>Email</h3>
+        <div className="form">
+          <input
+            className="input"
+            type="email"
+            placeholder="Enter Email"
+            inputMode="email"
+            onChange={handleChange}
+          />
+          <p>* Please use the registered Email.</p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "20px",
+            }}
+          >
+            <button id="submit-btn" onClick={() => handleClick(email)}>
+              Join Zoom Meeting
+            </button>
+            <button id="submit-btn" onClick={() => handleCredits(email)}>
+              Get Your Credit Balance
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
