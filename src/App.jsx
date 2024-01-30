@@ -147,29 +147,6 @@ export const App = () => {
     }
   };
 
-  const handleCredits = async (emailParam) => {
-    if (!emailRegex.test(emailParam)) {
-      alert("Please Enter a Valid Email");
-      window.location.reload();
-      return;
-    }
-    try {
-      setMode("showCredits");
-      setLoading(true);
-      const url = `https://backend.wisechamps.com/meeting`;
-      const res = await axios.post(url, { email: emailParam, payId });
-      const credits = res.data.credits;
-      const name = res.data.name;
-      setCurrcredits(credits);
-      setUsername(name);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      setError(true);
-      console.log("error is ------------", error);
-    }
-  };
-
   const updateTeam = async (emailParam, team, address, link) => {
     try {
       setLoading(true);
@@ -542,48 +519,6 @@ export const App = () => {
     );
   }
 
-  if (mode === "showCredits") {
-    return (
-      <>
-        <Header />
-        <div
-          id="loadingDiv"
-          style={{
-            width: "fit-content",
-          }}
-          className="animate__animated animate__fadeInRight"
-        >
-          <p>
-            Hi {username}, Your have currently <b>{currCredits} credits</b>.
-          </p>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "15px",
-            }}
-          >
-            {currCredits < 10 ? (
-              <button
-                id="submit-btn"
-                onClick={() =>
-                  window.location.assign(
-                    `https://payment.wisechamps.com?email=${email}`
-                  )
-                }
-              >
-                Buy Credits Now
-              </button>
-            ) : null}
-            <button id="submit-btn" onClick={() => handleClick(email)}>
-              Join Meeting Now
-            </button>
-          </div>
-        </div>
-      </>
-    );
-  }
-
   return (
     <>
       <Header />
@@ -607,9 +542,6 @@ export const App = () => {
           >
             <button id="submit-btn" onClick={() => handleClick(email)}>
               Join Zoom Meeting
-            </button>
-            <button id="submit-btn" onClick={() => handleCredits(email)}>
-              Get Your Credit Balance
             </button>
           </div>
         </div>
