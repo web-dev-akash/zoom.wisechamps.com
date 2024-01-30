@@ -299,3 +299,7 @@ h1 {
 .radio-input-wrapper .label {
   text-align: left;
 }
+
+.address #city {
+  text-transform: capitalize;
+}

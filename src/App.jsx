@@ -5,6 +5,7 @@ import axios from "axios";
 import "./App.css";
 import "animate.css";
 import { Header } from "./components/Header";
+import { Address } from "./components/Address";
 
 export const App = () => {
   const query = new URLSearchParams(window.location.search);
@@ -20,11 +21,12 @@ export const App = () => {
   const [error, setError] = useState(false);
   const [grade, setGrade] = useState("");
   const [link, setLink] = useState("");
-
+  const [address, setAddress] = useState("");
   const emailRegex = new RegExp(
     /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/,
     "gm"
   );
+
   const handleChange = (e) => {
     e.preventDefault();
     setEmail(e.target.value);
@@ -35,15 +37,17 @@ export const App = () => {
     setGrade(grade);
   };
 
-  const handleGradeSubmit = async (email, grade) => {
+  const handleGradeSubmit = async (email, grade, address) => {
     try {
       setLoading(true);
-      setMode("zoomlink");
       const url = `https://backend.wisechamps.com/quiz/team`;
       const res = await axios.post(url, { email: email, grade: grade });
+      console.log(res.data);
+      const mode = res.data.mode;
       const phone = res.data.phone;
       const student_name = res.data.student_name;
       const newLink = res.data.newLink;
+      const team = res.data.team;
       const start_date = moment().format("YYYY-MM-DD");
       const expiry_date = moment().add(1, "year").format("YYYY-MM-DD");
       const api = process.env.REACT_APP_API;
@@ -63,7 +67,19 @@ export const App = () => {
         start_date: start_date,
       };
       await axios.post(api, body, config);
-      window.location.assign(newLink);
+      if (mode === "gradeUpdated") {
+        setLink(newLink);
+        if (team && address) {
+          window.location.assign(newLink);
+        } else if (team) {
+          setMode("address");
+        } else {
+          setMode("team");
+        }
+      } else {
+        setMode(mode);
+      }
+      setLoading(false);
     } catch (error) {
       setLoading(false);
       setError(true);
@@ -105,12 +121,21 @@ export const App = () => {
       const link = res.data.link;
       const credits = res.data.credits;
       const grade = res.data.grade;
-      setLink(link);
+      const team = res.data.team;
+      const address = res.data.address;
       setGrade(grade);
       setCredits(credits);
+      setAddress(address);
       if (mode === "zoomlink") {
         setMode(mode);
-        window.location.assign(link);
+        setLink(link);
+        if (team && address) {
+          window.location.assign(link);
+        } else if (team) {
+          setMode("address");
+        } else {
+          setMode("team");
+        }
       } else {
         setMode(mode);
       }
@@ -145,6 +170,25 @@ export const App = () => {
     }
   };
 
+  const updateTeam = async (emailParam, team, address, link) => {
+    try {
+      setLoading(true);
+      setMode("zoomlink");
+      const url = `https://backend.wisechamps.com/quiz/team`;
+      const res = await axios.post(url, { email: emailParam, team: team });
+      if (address) {
+        window.location.assign(link);
+      } else {
+        setMode("address");
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setError(true);
+      console.log("error is ------------", error);
+    }
+  };
+
   useEffect(() => {
     if (email && payId && linkId && credits && amount) {
       capturePayment({
@@ -154,6 +198,8 @@ export const App = () => {
         credits,
         amount,
       });
+      handleClick(email);
+    } else if (email) {
       handleClick(email);
     }
   }, []);
@@ -369,7 +415,7 @@ export const App = () => {
           </label>
           <button
             id="submit-btn"
-            onClick={() => handleGradeSubmit(email, grade)}
+            onClick={() => handleGradeSubmit(email, grade, address)}
             style={{
               marginTop: "10px",
               width: "100%",
@@ -380,6 +426,43 @@ export const App = () => {
         </div>
       </>
     );
+  }
+
+  if (mode === "team") {
+    return (
+      <>
+        <Header />
+        <div className="animate__animated animate__fadeInRight">
+          <p>Please select your Team</p>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            <button
+              id="submit-btn"
+              onClick={() => updateTeam(email, "Boys", address, link)}
+            >
+              Boys
+            </button>
+            <button
+              id="submit-btn"
+              onClick={() => updateTeam(email, "Girls", address, link)}
+            >
+              Girls
+            </button>
+          </div>
+        </div>
+      </>
+    );
+  }
+
+  if (mode === "address") {
+    return <Address email={email} link={link} />;
   }
 
   if (mode === "zoomlink") {
