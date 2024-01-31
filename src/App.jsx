@@ -10,10 +10,7 @@ import { Address } from "./components/Address";
 export const App = () => {
   const query = new URLSearchParams(window.location.search);
   const [email, setEmail] = useState(query.get("email"));
-  const [linkId, setLinkId] = useState(query.get("razorpay_payment_link_id"));
-  const [payId, setPayId] = useState(query.get("razorpay_payment_id"));
-  const [credits, setCredits] = useState(query.get("credits"));
-  const [amount, setAmount] = useState(query.get("amount"));
+  const [credits, setCredits] = useState(0);
   const [mode, setMode] = useState("");
   const [username, setUsername] = useState("");
   const [currCredits, setCurrcredits] = useState(0);
@@ -88,26 +85,6 @@ export const App = () => {
     }
   };
 
-  const capturePayment = async ({ email, payId, linkId, credits, amount }) => {
-    try {
-      setLoading(true);
-      const url = `https://backend.wisechamps.com/payment/capture`;
-      const res = await axios.post(url, {
-        linkId,
-        payId,
-        email,
-        credits,
-        amount,
-      });
-      console.log(res);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      setError(true);
-      console.log("error is ------------", error);
-    }
-  };
-
   const handleClick = async (emailParam) => {
     if (!emailRegex.test(emailParam)) {
       alert("Please Enter a Valid Email");
@@ -117,7 +94,7 @@ export const App = () => {
       setMode("");
       setLoading(true);
       const url = `https://backend.wisechamps.com/meeting`;
-      const res = await axios.post(url, { email: emailParam, payId });
+      const res = await axios.post(url, { email: emailParam });
       const mode = res.data.mode;
       const link = res.data.link;
       const credits = res.data.credits ? res.data.credits : 0;
@@ -189,16 +166,7 @@ export const App = () => {
   };
 
   useEffect(() => {
-    if (email && payId && linkId && credits && amount) {
-      capturePayment({
-        email,
-        payId,
-        linkId,
-        credits,
-        amount,
-      });
-      handleClick(email);
-    } else if (email) {
+    if (email) {
       handleClick(email);
     }
   }, []);
@@ -210,9 +178,7 @@ export const App = () => {
           overflow: "hidden",
         }}
       >
-        <p style={{ fontSize: "18px" }}>
-          {payId ? "Processing Your Payment.." : "Searching for your session.."}
-        </p>
+        <p style={{ fontSize: "18px" }}>{"Searching for your session.."}</p>
         <RaceBy
           size={300}
           lineWeight={20}
