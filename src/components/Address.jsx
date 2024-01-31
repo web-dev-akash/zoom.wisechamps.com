@@ -13,7 +13,7 @@ import axios from "axios";
 import { Header } from "./Header";
 import { RaceBy } from "@uiball/loaders";
 
-export const Address = ({ email, link }) => {
+export const Address = ({ email, link, credits }) => {
   const [mode, setMode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -117,7 +117,10 @@ export const Address = ({ email, link }) => {
           width: "fit-content",
         }}
       >
-        <p>Redirecting You to Zoom..</p>
+        <p>
+          You have currently <b>{credits ? credits : 0} </b>
+          quiz balance..
+        </p>
         <RaceBy
           size={300}
           lineWeight={20}

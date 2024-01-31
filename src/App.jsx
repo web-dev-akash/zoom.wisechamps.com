@@ -22,6 +22,7 @@ export const App = () => {
   const [grade, setGrade] = useState("");
   const [link, setLink] = useState("");
   const [address, setAddress] = useState("");
+  const [team, setTeam] = useState("");
   const emailRegex = new RegExp(
     /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/,
     "gm"
@@ -119,17 +120,20 @@ export const App = () => {
       const res = await axios.post(url, { email: emailParam, payId });
       const mode = res.data.mode;
       const link = res.data.link;
-      const credits = res.data.credits;
+      const credits = res.data.credits ? res.data.credits : 0;
       const grade = res.data.grade;
       const team = res.data.team;
       const address = res.data.address;
       setGrade(grade);
       setCredits(credits);
       setAddress(address);
+      setTeam(team);
       if (mode === "zoomlink") {
         setMode(mode);
         setLink(link);
-        if (team && address) {
+        if (credits <= 3) {
+          setMode("buyCredits");
+        } else if (team && address) {
           window.location.assign(link);
         } else if (team) {
           setMode("address");
@@ -138,6 +142,24 @@ export const App = () => {
         }
       } else {
         setMode(mode);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setError(true);
+      console.log("error is ------------", error);
+    }
+  };
+
+  const handleTeamAndAddress = async (team, address, link) => {
+    try {
+      setLoading(true);
+      if (team && address) {
+        window.location.assign(link);
+      } else if (team) {
+        setMode("address");
+      } else {
+        setMode("team");
       }
       setLoading(false);
     } catch (error) {
@@ -189,11 +211,7 @@ export const App = () => {
         }}
       >
         <p style={{ fontSize: "18px" }}>
-          {payId
-            ? "Processing Your Payment.."
-            : mode === "showCredits"
-            ? "Getting your credit balance"
-            : "Searching for your session.."}
+          {payId ? "Processing Your Payment.." : "Searching for your session.."}
         </p>
         <RaceBy
           size={300}
@@ -202,6 +220,47 @@ export const App = () => {
           color="rgba(129, 140, 248)"
         />
       </div>
+    );
+  }
+
+  if (mode === "buyCredits") {
+    return (
+      <>
+        <Header />
+        <div className="animate__animated animate__fadeInRight">
+          <p style={{ fontSize: "15px" }}>
+            You have only <b>{credits}</b> quiz balance left.
+            <br />
+            Please add more quiz balance to enjoy uninterrupted quizzes.
+          </p>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              gap: "10px",
+            }}
+          >
+            <button
+              id="submit-btn"
+              onClick={() =>
+                window.location.assign(
+                  `https://quizbalance.wisechamps.com?email=${email}`
+                )
+              }
+            >
+              Add more
+            </button>
+            <button
+              id="submit-btn"
+              onClick={() => handleTeamAndAddress(team, address, link)}
+            >
+              Ask me later
+            </button>
+          </div>
+        </div>
+      </>
     );
   }
 
@@ -439,7 +498,7 @@ export const App = () => {
   }
 
   if (mode === "address") {
-    return <Address email={email} link={link} />;
+    return <Address email={email} link={link} credits={credits} />;
   }
 
   if (mode === "zoomlink") {
@@ -449,7 +508,10 @@ export const App = () => {
           overflow: "hidden",
         }}
       >
-        <p style={{ fontSize: "18px" }}>Redirecting you to Zoom..</p>
+        <p style={{ fontSize: "18px" }}>
+          You have currently <b>{credits ? credits : 0} </b>
+          quiz balance..
+        </p>
         <RaceBy
           size={300}
           lineWeight={20}
