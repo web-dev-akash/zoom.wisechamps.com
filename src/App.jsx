@@ -6,6 +6,15 @@ import "./App.css";
 import "animate.css";
 import { Header } from "./components/Header";
 import { Address } from "./components/Address";
+import {
+  Box,
+  Button,
+  ChakraProvider,
+  FormControl,
+  FormLabel,
+  Input,
+  Text,
+} from "@chakra-ui/react";
 
 export const App = () => {
   const query = new URLSearchParams(window.location.search);
@@ -20,6 +29,9 @@ export const App = () => {
   const [link, setLink] = useState("");
   const [address, setAddress] = useState("");
   const [team, setTeam] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [invalidPincode, setInvalidPincode] = useState(true);
+
   const emailRegex = new RegExp(
     /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/,
     "gm"
@@ -31,8 +43,27 @@ export const App = () => {
   };
 
   const handleChangeGrade = (e) => {
+    e.preventDefault();
     const grade = e.target.value;
     setGrade(grade);
+  };
+
+  const handlePincodeChange = async (e) => {
+    e.preventDefault();
+    const value = e.target.value.trim();
+    if (value.length === 6) {
+      const url = `${process.env.REACT_APP_PINCODE_API}=${value}`;
+      axios.get(url).then((res) => {
+        if (res.data.total !== 0) {
+          setInvalidPincode(false);
+        } else {
+          setInvalidPincode(true);
+        }
+      });
+    } else {
+      setInvalidPincode(true);
+    }
+    setPincode(value);
   };
 
   const handleGradeSubmit = async (email, grade, address) => {
@@ -146,10 +177,23 @@ export const App = () => {
     }
   };
 
-  const updateTeam = async (emailParam, team, address, link) => {
+  const updateTeam = async (emailParam, pincode, address, link) => {
     try {
       setLoading(true);
       setMode("zoomlink");
+      let team = "";
+      console.log(pincode);
+      console.log(pincode.charAt(0) === "1");
+      if (
+        pincode.charAt(0) === "1" ||
+        pincode.charAt(0) === "2" ||
+        pincode.charAt(0) === "3" ||
+        pincode.charAt(0) === "8"
+      ) {
+        team = "North";
+      } else {
+        team = "South";
+      }
       const url = `https://backend.wisechamps.com/quiz/team`;
       const res = await axios.post(url, { email: emailParam, team: team });
       if (address) {
@@ -434,31 +478,42 @@ export const App = () => {
     return (
       <>
         <Header />
-        <div className="animate__animated animate__fadeInRight">
-          <p>Please select your Team</p>
-          <div
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              gap: "10px",
-            }}
+        <ChakraProvider resetCSS={false}>
+          <Box
+            className="animate__animated animate__fadeInRight"
+            border={"1px solid #6666ff"}
+            margin={"0 auto"}
+            width={["80%", "80%", "400px", "400px"]}
+            padding={"2rem 1rem"}
+            borderRadius={"10px"}
           >
-            <button
-              id="submit-btn"
-              onClick={() => updateTeam(email, "Boys", address, link)}
-            >
-              Boys
-            </button>
-            <button
-              id="submit-btn"
-              onClick={() => updateTeam(email, "Girls", address, link)}
-            >
-              Girls
-            </button>
-          </div>
-        </div>
+            <form>
+              <Text fontWeight={"500"} mt={0} fontSize={"18px"}>
+                Please Enter your Pincode
+              </Text>
+              <FormControl mb={7} isRequired>
+                <Input
+                  boxSizing="border-box"
+                  isInvalid={invalidPincode && pincode}
+                  fontSize={["12px", "12px", "15px", "15px"]}
+                  type="number"
+                  name="pincode"
+                  placeholder="Enter Pincode"
+                  onChange={handlePincodeChange}
+                />
+              </FormControl>
+              <Button
+                type="submit"
+                width={"100%"}
+                isDisabled={invalidPincode}
+                id="submit-btn"
+                onClick={() => updateTeam(email, pincode, address, link)}
+              >
+                Submit
+              </Button>
+            </form>
+          </Box>
+        </ChakraProvider>
       </>
     );
   }

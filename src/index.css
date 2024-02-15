@@ -303,3 +303,7 @@ h1 {
 .address #city {
   text-transform: capitalize;
 }
+
+.chakraTeam {
+  border: 1px solid red !important;
+}
