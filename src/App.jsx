@@ -489,7 +489,7 @@ export const App = () => {
           >
             <form>
               <Text fontWeight={"500"} mt={0} fontSize={"18px"}>
-                Please Enter your Pincode
+                Please Enter your House Address Pincode
               </Text>
               <FormControl mb={7} isRequired>
                 <Input
