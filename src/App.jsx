@@ -187,8 +187,9 @@ export const App = () => {
       if (
         pincode.charAt(0) === "1" ||
         pincode.charAt(0) === "2" ||
-        pincode.charAt(0) === "3" ||
-        pincode.charAt(0) === "8"
+        pincode.charAt(0) === "7" ||
+        pincode.charAt(0) === "8" ||
+        pincode.charAt(0) === "9"
       ) {
         team = "North";
       } else {
@@ -489,7 +490,7 @@ export const App = () => {
           >
             <form>
               <Text fontWeight={"500"} mt={0} fontSize={"18px"}>
-                Please Enter your House Address Pincode
+                Please Enter your Area Pincode
               </Text>
               <FormControl mb={7} isRequired>
                 <Input
