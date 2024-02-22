@@ -182,8 +182,6 @@ export const App = () => {
       setLoading(true);
       setMode("zoomlink");
       let team = "";
-      console.log(pincode);
-      console.log(pincode.charAt(0) === "1");
       if (
         pincode.charAt(0) === "1" ||
         pincode.charAt(0) === "2" ||
