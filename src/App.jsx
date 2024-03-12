@@ -135,11 +135,11 @@ export const App = () => {
       const grade = res.data.grade;
       const team = res.data.team;
       const address = res.data.address;
-      setGrade(grade);
       setCredits(credits);
       setAddress(address);
       setTeam(team);
       if (mode === "zoomlink") {
+        setGrade(grade);
         setMode(mode);
         setLink(link);
         if (credits <= 3) {
