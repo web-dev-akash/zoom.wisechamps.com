@@ -9,10 +9,9 @@ import { Address } from "./components/Address";
 import {
   Box,
   Button,
-  ChakraProvider,
   FormControl,
-  FormLabel,
   Input,
+  Select,
   Text,
 } from "@chakra-ui/react";
 
@@ -43,9 +42,10 @@ export const App = () => {
   };
 
   const handleChangeGrade = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     const grade = e.target.value;
     setGrade(grade);
+    console.log(grade);
   };
 
   const handlePincodeChange = async (e) => {
@@ -68,10 +68,13 @@ export const App = () => {
 
   const handleGradeSubmit = async (email, grade, address) => {
     try {
+      if (!grade) {
+        alert("Please select a grade");
+        return;
+      }
       setLoading(true);
       const url = `https://backend.wisechamps.com/quiz/team`;
       const res = await axios.post(url, { email: email, grade: grade });
-      console.log(res.data);
       const mode = res.data.mode;
       const phone = res.data.phone;
       const student_name = res.data.student_name;
@@ -275,201 +278,68 @@ export const App = () => {
 
   if (mode === "oldData") {
     return (
-      <>
+      <Box width={"90%"} m={"0 auto"}>
         <Header />
-        <div
+        <Box
+          width={"100%"}
           className="main mainReferee animate__animated animate__fadeInRight"
-          style={{
-            marginTop: "40px",
-          }}
+          maxWidth={"400px"}
+          padding={"1.5rem"}
+          textAlign={"left"}
         >
-          <h3
-            style={{
-              margin: "0 0 10px 0",
+          <Text
+            m={"0"}
+            fontSize={["14px", "14px", "16px", "18px"]}
+            fontWeight={700}
+          >
+            Select Grade
+          </Text>
+
+          <Text
+            fontSize={["12px", "12px", "14px", "15px"]}
+            mt={"5px"}
+            color={"#414141"}
+          >
+            Please select your grade for the new{" "}
+            <Text as={"span"} color={"#2118cc"}>
+              Academic Session 2024 - 2025
+            </Text>
+          </Text>
+
+          <Select
+            fontSize={["12px", "12px", "14px", "15px"]}
+            m={"15px 0"}
+            onChange={handleChangeGrade}
+            border={"1px solid #4E46E4"}
+            outline={"none"}
+            _focus={{
+              outline: "none",
+              border: "1px solid #4E46E4",
             }}
           >
-            Select Your Grade
-          </h3>
-          <label className="label">
-            <input
-              value="1"
-              name="value-radio"
-              id="value-2"
-              className="radio-input"
-              type="radio"
-              onChange={handleChangeGrade}
-            />
-            <div className="radio-design"></div>
-            <div
-              className="label-text"
-              style={{
-                textTransform: "uppercase",
-                fontWeight: "600",
-                letterSpacing: "1px",
-              }}
-            >
-              Grade 1
-            </div>
-          </label>
-          <label className="label">
-            <input
-              value="2"
-              name="value-radio"
-              id="value-3"
-              className="radio-input"
-              type="radio"
-              onChange={handleChangeGrade}
-            />
-            <div className="radio-design"></div>
-            <div
-              className="label-text"
-              style={{
-                textTransform: "uppercase",
-                fontWeight: "600",
-                letterSpacing: "1px",
-              }}
-            >
-              Grade 2
-            </div>
-          </label>
-          <label className="label">
-            <input
-              value="3"
-              name="value-radio"
-              id="value-4"
-              className="radio-input"
-              type="radio"
-              onChange={handleChangeGrade}
-            />
-            <div className="radio-design"></div>
-            <div
-              className="label-text"
-              style={{
-                textTransform: "uppercase",
-                fontWeight: "600",
-                letterSpacing: "1px",
-              }}
-            >
-              Grade 3
-            </div>
-          </label>
-          <label className="label">
-            <input
-              value="4"
-              name="value-radio"
-              id="value-4"
-              className="radio-input"
-              type="radio"
-              onChange={handleChangeGrade}
-            />
-            <div className="radio-design"></div>
-            <div
-              className="label-text"
-              style={{
-                textTransform: "uppercase",
-                fontWeight: "600",
-                letterSpacing: "1px",
-              }}
-            >
-              Grade 4
-            </div>
-          </label>
-          <label className="label">
-            <input
-              value="5"
-              name="value-radio"
-              id="value-2"
-              className="radio-input"
-              type="radio"
-              onChange={handleChangeGrade}
-            />
-            <div className="radio-design"></div>
-            <div
-              className="label-text"
-              style={{
-                textTransform: "uppercase",
-                fontWeight: "600",
-                letterSpacing: "1px",
-              }}
-            >
-              Grade 5
-            </div>
-          </label>
-          <label className="label">
-            <input
-              value="6"
-              name="value-radio"
-              id="value-3"
-              className="radio-input"
-              type="radio"
-              onChange={handleChangeGrade}
-            />
-            <div className="radio-design"></div>
-            <div
-              className="label-text"
-              style={{
-                textTransform: "uppercase",
-                fontWeight: "600",
-                letterSpacing: "1px",
-              }}
-            >
-              Grade 6
-            </div>
-          </label>
-          <label className="label">
-            <input
-              value="7"
-              name="value-radio"
-              id="value-4"
-              className="radio-input"
-              type="radio"
-              onChange={handleChangeGrade}
-            />
-            <div className="radio-design"></div>
-            <div
-              className="label-text"
-              style={{
-                textTransform: "uppercase",
-                fontWeight: "600",
-                letterSpacing: "1px",
-              }}
-            >
-              Grade 7
-            </div>
-          </label>
-          <label className="label">
-            <input
-              value="8"
-              name="value-radio"
-              id="value-4"
-              className="radio-input"
-              type="radio"
-              onChange={handleChangeGrade}
-            />
-            <div className="radio-design"></div>
-            <div
-              className="label-text"
-              style={{
-                textTransform: "uppercase",
-                fontWeight: "600",
-                letterSpacing: "1px",
-              }}
-            >
-              Grade 8
-            </div>
-          </label>
-          <button
+            <option value="" selected>
+              -None-
+            </option>
+            <option value="1">Grade 1</option>
+            <option value="2">Grade 2</option>
+            <option value="3">Grade 3</option>
+            <option value="4">Grade 4</option>
+            <option value="5">Grade 5</option>
+            <option value="6">Grade 6</option>
+            <option value="7">Grade 7</option>
+            <option value="8">Grade 8</option>
+          </Select>
+
+          <Button
             id="submit-btn"
             onClick={() => handleGradeSubmit(email, grade, address)}
-            style={{
-              marginTop: "10px",
-              width: "100%",
-            }}
+            width={"100%"}
+            fontSize={["12px", "12px", "14px", "15px"]}
           >
             Submit
-          </button>
-        </div>
-      </>
+          </Button>
+        </Box>
+      </Box>
     );
   }
 
@@ -477,42 +347,40 @@ export const App = () => {
     return (
       <>
         <Header />
-        <ChakraProvider resetCSS={false}>
-          <Box
-            className="animate__animated animate__fadeInRight"
-            border={"1px solid #6666ff"}
-            margin={"0 auto"}
-            width={["80%", "80%", "400px", "400px"]}
-            padding={"2rem 1rem"}
-            borderRadius={"10px"}
-          >
-            <form>
-              <Text fontWeight={"500"} mt={0} fontSize={"18px"}>
-                Please Enter your Area Pincode
-              </Text>
-              <FormControl mb={7} isRequired>
-                <Input
-                  boxSizing="border-box"
-                  isInvalid={invalidPincode && pincode}
-                  fontSize={["12px", "12px", "15px", "15px"]}
-                  type="number"
-                  name="pincode"
-                  placeholder="Enter Pincode"
-                  onChange={handlePincodeChange}
-                />
-              </FormControl>
-              <Button
-                type="submit"
-                width={"100%"}
-                isDisabled={invalidPincode}
-                id="submit-btn"
-                onClick={() => updateTeam(email, pincode, address, link)}
-              >
-                Submit
-              </Button>
-            </form>
-          </Box>
-        </ChakraProvider>
+        <Box
+          className="animate__animated animate__fadeInRight"
+          border={"1px solid #6666ff"}
+          margin={"0 auto"}
+          width={["80%", "80%", "400px", "400px"]}
+          padding={"2rem 1rem"}
+          borderRadius={"10px"}
+        >
+          <form>
+            <Text fontWeight={"500"} mt={0} fontSize={"18px"}>
+              Please Enter your Area Pincode
+            </Text>
+            <FormControl mb={7} isRequired>
+              <Input
+                boxSizing="border-box"
+                isInvalid={invalidPincode && pincode}
+                fontSize={["12px", "12px", "15px", "15px"]}
+                type="number"
+                name="pincode"
+                placeholder="Enter Pincode"
+                onChange={handlePincodeChange}
+              />
+            </FormControl>
+            <Button
+              type="submit"
+              width={"100%"}
+              isDisabled={invalidPincode}
+              id="submit-btn"
+              onClick={() => updateTeam(email, pincode, address, link)}
+            >
+              Submit
+            </Button>
+          </form>
+        </Box>
       </>
     );
   }

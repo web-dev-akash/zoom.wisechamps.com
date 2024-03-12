@@ -31,8 +31,7 @@ h1 {
 #submit-btn {
   border-radius: 8px;
   border: 2px solid transparent;
-  padding: 0.5em 1rem;
-  font-size: 1em;
+  padding: 0.7em 1rem;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
@@ -74,6 +73,7 @@ h1 {
   background-color: #f5faff;
   color: #0d0c22;
   transition: 0.5s ease;
+  font-size: 12px;
 }
 
 .input::placeholder {
@@ -88,12 +88,13 @@ h1 {
   box-shadow: 0 0 0 5px rgb(129 140 248 / 30%);
 }
 .main {
-  width: 350px;
-  padding: 1rem 2rem 2.5rem 2rem;
+  width: 100%;
+  padding: 0.5rem 2rem 2rem 2rem;
   box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
     rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
   border-radius: 1rem;
   text-align: left;
+  max-width: 400px;
 }
 
 .form {
@@ -125,11 +126,11 @@ h1 {
     min-height: 90vh !important;
   }
   .main {
-    width: 70%;
-    margin: auto;
+    box-sizing: border-box;
+    width: 90%;
+    margin: 0 auto;
   }
   .input {
-    width: unset;
     padding-left: 10px;
   }
 }
