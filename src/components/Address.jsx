@@ -87,6 +87,7 @@ export const Address = ({ email, link, credits }) => {
       const res = await axios.post(url, body);
       if (link === null) {
         setMode("nosession");
+        setLoading(false);
         return;
       }
       window.location.assign(link);

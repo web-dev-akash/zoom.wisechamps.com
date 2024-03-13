@@ -96,6 +96,7 @@ export const App = () => {
         if (address) {
           if (newLink === null) {
             setMode("nosession");
+            setLoading(false);
             return;
           }
           window.location.assign(newLink);
@@ -165,6 +166,7 @@ export const App = () => {
       if (address) {
         if (link === null) {
           setMode("nosession");
+          setLoading(false);
           return;
         }
         window.location.assign(link);
@@ -269,7 +271,7 @@ export const App = () => {
                 )
               }
             >
-              Add more
+              Add Quiz Balance
             </Button>
             <Button
               fontSize={["12px", "12px", "14px", "15px"]}
