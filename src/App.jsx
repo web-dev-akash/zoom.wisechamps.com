@@ -131,6 +131,7 @@ export const App = () => {
       setCredits(credits);
       setAddress(address);
       setTeam(team);
+      console.log("Link is :", link);
       if (mode === "zoomlink") {
         setGrade(grade);
         setMode(mode);
@@ -140,6 +141,7 @@ export const App = () => {
         } else if (address) {
           if (link === null) {
             setMode("nosession");
+            setLoading(false);
             return;
           }
           window.location.assign(link);
