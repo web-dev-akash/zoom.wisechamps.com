@@ -6,30 +6,23 @@ import "./App.css";
 import "animate.css";
 import { Header } from "./components/Header";
 import { Address } from "./components/Address";
-import {
-  Box,
-  Button,
-  FormControl,
-  Input,
-  Select,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Button, Select, Text } from "@chakra-ui/react";
 
 export const App = () => {
   const query = new URLSearchParams(window.location.search);
   const [email, setEmail] = useState(query.get("email"));
   const [credits, setCredits] = useState(0);
   const [mode, setMode] = useState("");
-  const [username, setUsername] = useState("");
-  const [currCredits, setCurrcredits] = useState(0);
+  // const [username, setUsername] = useState("");
+  // const [currCredits, setCurrcredits] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [grade, setGrade] = useState("");
   const [link, setLink] = useState("");
   const [address, setAddress] = useState("");
   const [team, setTeam] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [invalidPincode, setInvalidPincode] = useState(true);
+  // const [pincode, setPincode] = useState("");
+  // const [invalidPincode, setInvalidPincode] = useState(true);
 
   const emailRegex = new RegExp(
     /^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$/,
@@ -48,23 +41,23 @@ export const App = () => {
     console.log(grade);
   };
 
-  const handlePincodeChange = async (e) => {
-    e.preventDefault();
-    const value = e.target.value.trim();
-    if (value.length === 6) {
-      const url = `${process.env.REACT_APP_PINCODE_API}=${value}`;
-      axios.get(url).then((res) => {
-        if (res.data.total !== 0) {
-          setInvalidPincode(false);
-        } else {
-          setInvalidPincode(true);
-        }
-      });
-    } else {
-      setInvalidPincode(true);
-    }
-    setPincode(value);
-  };
+  // const handlePincodeChange = async (e) => {
+  //   e.preventDefault();
+  //   const value = e.target.value.trim();
+  //   if (value.length === 6) {
+  //     const url = `${process.env.REACT_APP_PINCODE_API}=${value}`;
+  //     axios.get(url).then((res) => {
+  //       if (res.data.total !== 0) {
+  //         setInvalidPincode(false);
+  //       } else {
+  //         setInvalidPincode(true);
+  //       }
+  //     });
+  //   } else {
+  //     setInvalidPincode(true);
+  //   }
+  //   setPincode(value);
+  // };
 
   const handleGradeSubmit = async (email, grade, address) => {
     try {
@@ -79,7 +72,6 @@ export const App = () => {
       const phone = res.data.phone;
       const student_name = res.data.student_name;
       const newLink = res.data.newLink;
-      const team = res.data.team;
       const start_date = moment().format("YYYY-MM-DD");
       const expiry_date = moment().add(1, "year").format("YYYY-MM-DD");
       const api = process.env.REACT_APP_API;
@@ -101,12 +93,14 @@ export const App = () => {
       await axios.post(api, body, config);
       if (mode === "gradeUpdated") {
         setLink(newLink);
-        if (team && address) {
+        if (address) {
+          if (newLink === null) {
+            setMode("nosession");
+            return;
+          }
           window.location.assign(newLink);
-        } else if (team) {
-          setMode("address");
         } else {
-          setMode("team");
+          setMode("address");
         }
       } else {
         setMode(mode);
@@ -133,7 +127,6 @@ export const App = () => {
       const link = res.data.link;
       const credits = res.data.credits ? res.data.credits : 0;
       const grade = res.data.grade;
-      const team = res.data.team;
       const address = res.data.address;
       setCredits(credits);
       setAddress(address);
@@ -144,12 +137,14 @@ export const App = () => {
         setLink(link);
         if (credits <= 3) {
           setMode("buyCredits");
-        } else if (team && address) {
+        } else if (address) {
+          if (link === null) {
+            setMode("nosession");
+            return;
+          }
           window.location.assign(link);
-        } else if (team) {
-          setMode("address");
         } else {
-          setMode("team");
+          setMode("address");
         }
       } else {
         setMode(mode);
@@ -162,15 +157,17 @@ export const App = () => {
     }
   };
 
-  const handleTeamAndAddress = async (team, address, link) => {
+  const handleTeamAndAddress = async (address, link) => {
     try {
       setLoading(true);
-      if (team && address) {
+      if (address) {
+        if (link === null) {
+          setMode("nosession");
+          return;
+        }
         window.location.assign(link);
-      } else if (team) {
-        setMode("address");
       } else {
-        setMode("team");
+        setMode("address");
       }
       setLoading(false);
     } catch (error) {
@@ -180,36 +177,36 @@ export const App = () => {
     }
   };
 
-  const updateTeam = async (emailParam, pincode, address, link) => {
-    try {
-      setLoading(true);
-      setMode("zoomlink");
-      let team = "";
-      if (
-        pincode.charAt(0) === "1" ||
-        pincode.charAt(0) === "2" ||
-        pincode.charAt(0) === "7" ||
-        pincode.charAt(0) === "8" ||
-        pincode.charAt(0) === "9"
-      ) {
-        team = "North";
-      } else {
-        team = "South";
-      }
-      const url = `https://backend.wisechamps.com/quiz/team`;
-      const res = await axios.post(url, { email: emailParam, team: team });
-      if (address) {
-        window.location.assign(link);
-      } else {
-        setMode("address");
-      }
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      setError(true);
-      console.log("error is ------------", error);
-    }
-  };
+  // const updateTeam = async (emailParam, pincode, address, link) => {
+  //   try {
+  //     setLoading(true);
+  //     setMode("zoomlink");
+  //     let team = "";
+  //     if (
+  //       pincode.charAt(0) === "1" ||
+  //       pincode.charAt(0) === "2" ||
+  //       pincode.charAt(0) === "7" ||
+  //       pincode.charAt(0) === "8" ||
+  //       pincode.charAt(0) === "9"
+  //     ) {
+  //       team = "North";
+  //     } else {
+  //       team = "South";
+  //     }
+  //     const url = `https://backend.wisechamps.com/quiz/team`;
+  //     const res = await axios.post(url, { email: emailParam, team: team });
+  //     if (address) {
+  //       window.location.assign(link);
+  //     } else {
+  //       setMode("address");
+  //     }
+  //     setLoading(false);
+  //   } catch (error) {
+  //     setLoading(false);
+  //     setError(true);
+  //     console.log("error is ------------", error);
+  //   }
+  // };
 
   useEffect(() => {
     if (email) {
@@ -239,12 +236,18 @@ export const App = () => {
     return (
       <>
         <Header />
-        <div className="animate__animated animate__fadeInRight">
-          <p style={{ fontSize: "15px" }}>
-            You have only <b>{credits}</b> quiz balance left.
-            <br />
-            Please add more quiz balance to enjoy uninterrupted quizzes.
-          </p>
+        <Box className="main animate__animated animate__fadeInRight">
+          <Text fontWeight={700} fontSize={["14px", "14px", "16px", "18px"]}>
+            {credits === 0 ? "No Quiz Balance" : "Low Quiz Balance"}
+          </Text>
+          <Text m={"10px 0 0 0"} fontSize={["13px", "13px", "15px", "16px"]}>
+            You have only <b>{credits} quiz balance</b> left.
+          </Text>
+          <Text m={"10px 0 15px 0"} fontSize={["13px", "13px", "15px", "16px"]}>
+            {credits === 0
+              ? "Please add more quiz balance to join today's quiz."
+              : " Please add more quiz balance to enjoy uninterrupted quizzes."}
+          </Text>
           <div
             style={{
               width: "100%",
@@ -254,7 +257,9 @@ export const App = () => {
               gap: "10px",
             }}
           >
-            <button
+            <Button
+              fontSize={["12px", "12px", "14px", "15px"]}
+              height={["35px", "35px", "40px", "40px"]}
               id="submit-btn"
               onClick={() =>
                 window.location.assign(
@@ -263,15 +268,17 @@ export const App = () => {
               }
             >
               Add more
-            </button>
-            <button
+            </Button>
+            <Button
+              fontSize={["12px", "12px", "14px", "15px"]}
+              height={["35px", "35px", "40px", "40px"]}
               id="submit-btn"
-              onClick={() => handleTeamAndAddress(team, address, link)}
+              onClick={() => handleTeamAndAddress(address, link)}
             >
               Ask me later
-            </button>
+            </Button>
           </div>
-        </div>
+        </Box>
       </>
     );
   }
@@ -343,47 +350,47 @@ export const App = () => {
     );
   }
 
-  if (mode === "team") {
-    return (
-      <>
-        <Header />
-        <Box
-          className="animate__animated animate__fadeInRight"
-          border={"1px solid #6666ff"}
-          margin={"0 auto"}
-          width={["80%", "80%", "400px", "400px"]}
-          padding={"2rem 1rem"}
-          borderRadius={"10px"}
-        >
-          <form>
-            <Text fontWeight={"500"} mt={0} fontSize={"18px"}>
-              Please Enter your Area Pincode
-            </Text>
-            <FormControl mb={7} isRequired>
-              <Input
-                boxSizing="border-box"
-                isInvalid={invalidPincode && pincode}
-                fontSize={["12px", "12px", "15px", "15px"]}
-                type="number"
-                name="pincode"
-                placeholder="Enter Pincode"
-                onChange={handlePincodeChange}
-              />
-            </FormControl>
-            <Button
-              type="submit"
-              width={"100%"}
-              isDisabled={invalidPincode}
-              id="submit-btn"
-              onClick={() => updateTeam(email, pincode, address, link)}
-            >
-              Submit
-            </Button>
-          </form>
-        </Box>
-      </>
-    );
-  }
+  // if (mode === "team") {
+  //   return (
+  //     <>
+  //       <Header />
+  //       <Box
+  //         className="animate__animated animate__fadeInRight"
+  //         border={"1px solid #6666ff"}
+  //         margin={"0 auto"}
+  //         width={["80%", "80%", "400px", "400px"]}
+  //         padding={"2rem 1rem"}
+  //         borderRadius={"10px"}
+  //       >
+  //         <form>
+  //           <Text fontWeight={"500"} mt={0} fontSize={"18px"}>
+  //             Please Enter your Area Pincode
+  //           </Text>
+  //           <FormControl mb={7} isRequired>
+  //             <Input
+  //               boxSizing="border-box"
+  //               isInvalid={invalidPincode && pincode}
+  //               fontSize={["12px", "12px", "15px", "15px"]}
+  //               type="number"
+  //               name="pincode"
+  //               placeholder="Enter Pincode"
+  //               onChange={handlePincodeChange}
+  //             />
+  //           </FormControl>
+  //           <Button
+  //             type="submit"
+  //             width={"100%"}
+  //             isDisabled={invalidPincode}
+  //             id="submit-btn"
+  //             onClick={() => updateTeam(email, pincode, address, link)}
+  //           >
+  //             Submit
+  //           </Button>
+  //         </form>
+  //       </Box>
+  //     </>
+  //   );
+  // }
 
   if (mode === "address") {
     return <Address email={email} link={link} credits={credits} />;
@@ -426,11 +433,17 @@ export const App = () => {
       <>
         <Header />
         <div className="animate__animated animate__fadeInRight">
-          <p>
-            It appears that there is no active
-            <br />
-            session at this moment.
-          </p>
+          <Text
+            m={0}
+            fontWeight={600}
+            fontSize={["20px", "20px", "23px", "25px"]}
+          >
+            OOPS!
+          </Text>
+          <Text m={"5px 0 0 0"} fontSize={["15px", "15px", "17px", "19px"]}>
+            There is no active session at this time <br /> Please try again
+            later.
+          </Text>
         </div>
       </>
     );

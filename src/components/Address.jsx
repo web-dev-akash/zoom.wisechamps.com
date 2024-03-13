@@ -85,6 +85,10 @@ export const Address = ({ email, link, credits }) => {
       };
       const url = `https://backend.wisechamps.com/quiz/address`;
       const res = await axios.post(url, body);
+      if (link === null) {
+        setMode("nosession");
+        return;
+      }
       window.location.assign(link);
       setLoading(false);
     } catch (error) {
@@ -96,6 +100,10 @@ export const Address = ({ email, link, credits }) => {
 
   const handleSkipAddress = async (link) => {
     try {
+      if (link === null) {
+        setMode("nosession");
+        return;
+      }
       setLoading(true);
       setMode("loading");
       window.location.assign(link);
@@ -136,6 +144,27 @@ export const Address = ({ email, link, credits }) => {
       <div>
         <h1>Something Went Wrong. Please Refresh</h1>
       </div>
+    );
+  }
+
+  if (mode === "nosession") {
+    return (
+      <>
+        <Header />
+        <div className="animate__animated animate__fadeInRight">
+          <Text
+            m={0}
+            fontWeight={600}
+            fontSize={["20px", "20px", "23px", "25px"]}
+          >
+            OOPS!
+          </Text>
+          <Text m={"5px 0 0 0"} fontSize={["15px", "15px", "17px", "19px"]}>
+            There is no active session at this time <br /> Please try again
+            later.
+          </Text>
+        </div>
+      </>
     );
   }
 
