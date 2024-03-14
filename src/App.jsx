@@ -132,7 +132,6 @@ export const App = () => {
       setCredits(credits);
       setAddress(address);
       setTeam(team);
-      console.log("Link is :", link);
       if (mode === "zoomlink") {
         setGrade(grade);
         setMode(mode);
@@ -303,7 +302,7 @@ export const App = () => {
             fontSize={["14px", "14px", "16px", "18px"]}
             fontWeight={700}
           >
-            Select Grade
+            Select New Grade
           </Text>
 
           <Text
