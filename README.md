@@ -1,70 +1,92 @@
-# Getting Started with Create React App
+  <div align="center">
+  <h1 align="center">Wisechamps Zoom Portal</h1>
+  <h3>Codebase for the Wisechamps Zoom Portal platform</h3>
+  <h3>◦ Developed with the software and tools below.</h3>
+  <p align="center"><img src="https://img.shields.io/badge/-React-004E89?logo=React&style=flat" alt='React\' />
+<img src="https://via.placeholder.com/1/0000/00000000" alt="spacer" /><img src="https://img.shields.io/badge/-Chakra%20UI-004E89?logo=Chakra%20UI&style=flat" alt='Chakra UI\' />
+<img src="https://via.placeholder.com/1/0000/00000000" alt="spacer" /><img src="https://img.shields.io/badge/-Emotion-004E89?logo=Emotion&style=flat" alt='Emotion\' />
+<img src="https://via.placeholder.com/1/0000/00000000" alt="spacer" /><img src="https://img.shields.io/badge/-Framer%20Motion-004E89?logo=Framer%20Motion&style=flat" alt='Framer Motion\' />
+<img src="https://via.placeholder.com/1/0000/00000000" alt="spacer" /><img src="https://img.shields.io/badge/-Axios-004E89?logo=Axios&style=flat" alt='Axios\' />
+<img src="https://via.placeholder.com/1/0000/00000000" alt="spacer" /><img src="https://img.shields.io/badge/-Moment-004E89?logo=Moment&style=flat" alt='Moment"' />
+<img src="https://via.placeholder.com/1/0000/00000000" alt="spacer" />
+  </p>
+  </div>
+  
+  ---
+  ## 📚 Table of Contents
+  - [📚 Table of Contents](#-table-of-contents)
+  - [🔍 Overview](#-overview)
+  - [🌟 Features](#-features)
+  - [📁 Repository Structure](#-repository-structure)
+  - [💻 Code Summary](#-code-summary)
+  - [🚀 Getting Started](#-getting-started)
+  
+  ---
+  
+  
+  ## 🔍 Overview
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This project appears to be a React application with a Node.js backend, using the Express framework. The frontend is built using React and the backend is built using Node.js and Express. The project includes a `package.json` file for managing dependencies and a `src` directory containing the source code for the application.
 
-## Available Scripts
+---
 
-In the project directory, you can run:
+## 🌟 Features
 
-### `npm start`
+React, Node.js, Express, React-Express
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+---
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 📁 Repository Structure
 
-### `npm test`
+```sh
+├── .env
+├── .gitignore
+├── package-lock.json
+├── package.json
+└── src
+    ├── App.css
+    ├── App.jsx
+    ├── components
+    │   ├── Address.jsx
+    │   └── Header.jsx
+    ├── index.css
+    └── index.js
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 💻 Code Summary
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+<details><summary>\src</summary>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+| File     | Summary                                                                                                                                                                                                                                     |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| App.jsx  | The code is a React component that renders a form for users to enter their email address and join a Zoom meeting. It also handles the logic for determining the user's grade and whether they have enough quiz balance to join the meeting. |
+| index.js | The code creates a React app using Chakra UI, rendering the App component within the ChakraProvider and attaching it to the root element with ID root                                                                                       |
 
-### `npm run eject`
+</details>
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+---
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+<details><summary>\src\components</summary>
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+| File        | Summary                                                                                                                                                                                                                                                                                                                                                                  |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Address.jsx | The code is a React component that renders an address form for a quiz game. It includes input fields for pincode, flat, street, landmark, city, and state, as well as buttons for submitting the form and skipping it. The component also includes a useEffect hook to handle changes in the address fields and a useState hook to manage the loading state of the form. |
+| Header.jsx  | The code defines a React component called Header that renders an image logo with a fade-in animation.                                                                                                                                                                                                                                                                    |
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+</details>
 
-## Learn More
+---
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 🚀 Getting Started
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+To get started with this project, follow these steps:<br>
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+1. Install the necessary dependencies by running `npm install` or `yarn install` in your terminal.
+2. Start the development server by running `npm start` or `yarn start`. This will launch a development server at <http://localhost:3000/>.
+3. Open your web browser and navigate to <http://localhost:3000/> to see the application running.
+4. You can now start exploring the codebase and making changes as needed.
+5. When you're ready to deploy the application, run `npm run build` or `yarn build` to create a production-ready build.
+6. You can then deploy the build to a hosting platform of your choice.
