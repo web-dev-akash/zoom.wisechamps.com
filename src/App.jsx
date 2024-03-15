@@ -310,9 +310,9 @@ export const App = () => {
             mt={"5px"}
             color={"#414141"}
           >
-            Please select your grade for the new{" "}
-            <Text as={"span"} color={"#2118cc"}>
-              Academic Session 2024 - 2025
+            Please select your grade for the{" "}
+            <Text as={"span"} color={"#2118cc"} fontWeight={600}>
+              New Academic Session 2024 - 2025
             </Text>
           </Text>
 
