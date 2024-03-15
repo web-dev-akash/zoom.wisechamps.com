@@ -26,7 +26,7 @@
   
   ## 🔍 Overview
 
-This project appears to be a React application with a Node.js backend, using the Express framework. The frontend is built using React and the backend is built using Node.js and Express. The project includes a `package.json` file for managing dependencies and a `src` directory containing the source code for the application.
+This project is a React application with a Node.js backend, using the Express framework. The frontend is built using React and the backend is built using Node.js and Express. The project includes a `package.json` file for managing dependencies and a `src` directory containing the source code for the application.
 
 ---
 
